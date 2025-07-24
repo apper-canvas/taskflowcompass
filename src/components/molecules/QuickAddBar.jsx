@@ -4,28 +4,66 @@ import { toast } from "react-toastify"
 import ApperIcon from "@/components/ApperIcon"
 import Input from "@/components/atoms/Input"
 import Button from "@/components/atoms/Button"
-
+import RecurringTaskModal from "@/components/molecules/RecurringTaskModal"
 const QuickAddBar = ({ onAdd, categories = [] }) => {
-  const [title, setTitle] = useState("")
+const [title, setTitle] = useState("")
   const [isExpanded, setIsExpanded] = useState(false)
   const [priority, setPriority] = useState("medium")
   const [category, setCategory] = useState(categories[0]?.name || "Personal")
-
-  const handleSubmit = async (e) => {
+  const [isRecurring, setIsRecurring] = useState(false)
+  const [recurringData, setRecurringData] = useState(null)
+  const [showRecurringModal, setShowRecurringModal] = useState(false)
+const handleSubmit = async (e) => {
     e.preventDefault()
     if (!title.trim()) return
 
     try {
-      await onAdd({
+      const taskData = {
         title: title.trim(),
         priority,
-        category
-      })
+        category,
+        isRecurring,
+        recurringData: isRecurring ? recurringData : null
+      }
+      await onAdd(taskData)
       setTitle("")
       setIsExpanded(false)
+      setIsRecurring(false)
+      setRecurringData(null)
       toast.success("Task added successfully!")
     } catch (error) {
       toast.error("Failed to add task")
+    }
+  }
+
+  const handleRecurringToggle = () => {
+    if (!isRecurring) {
+      setShowRecurringModal(true)
+    } else {
+      setIsRecurring(false)
+      setRecurringData(null)
+    }
+  }
+
+  const handleRecurringSave = (data) => {
+    setRecurringData(data)
+    setIsRecurring(true)
+  }
+
+  const getRecurringLabel = () => {
+    if (!recurringData) return ""
+    const { pattern, frequency } = recurringData
+    switch (pattern) {
+      case "daily":
+        return frequency === 1 ? "Daily" : `Every ${frequency} days`
+      case "weekly":
+        return frequency === 1 ? "Weekly" : `Every ${frequency} weeks`
+      case "monthly":
+        return frequency === 1 ? "Monthly" : `Every ${frequency} months`
+      case "custom":
+        return `Every ${recurringData.customInterval} ${recurringData.customUnit}`
+      default:
+        return "Recurring"
     }
   }
 
@@ -105,6 +143,35 @@ const QuickAddBar = ({ onAdd, categories = [] }) => {
               </div>
             </div>
 
+{/* Recurring Toggle */}
+            <div className="flex items-center justify-between py-3 border-t border-gray-100">
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={handleRecurringToggle}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors ${
+                    isRecurring
+                      ? "bg-primary text-white border-primary"
+                      : "bg-white text-gray-600 border-gray-200 hover:border-primary hover:text-primary"
+                  }`}
+                >
+                  <ApperIcon name="RotateCcw" size={14} />
+                  <span className="text-sm font-medium">
+                    {isRecurring ? getRecurringLabel() : "Repeat"}
+                  </span>
+                </button>
+                {isRecurring && (
+                  <button
+                    type="button"
+                    onClick={() => setShowRecurringModal(true)}
+                    className="text-sm text-primary hover:text-primary-dark"
+                  >
+                    Edit
+                  </button>
+                )}
+              </div>
+            </div>
+
             <div className="flex justify-end gap-2">
               <Button
                 type="button"
@@ -126,7 +193,14 @@ const QuickAddBar = ({ onAdd, categories = [] }) => {
             </div>
           </motion.div>
         )}
-      </form>
+</form>
+
+      <RecurringTaskModal
+        isOpen={showRecurringModal}
+        onClose={() => setShowRecurringModal(false)}
+        onSave={handleRecurringSave}
+        initialData={recurringData}
+      />
     </motion.div>
   )
 }

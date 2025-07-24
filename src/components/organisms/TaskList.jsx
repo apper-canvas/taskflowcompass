@@ -55,10 +55,17 @@ const TaskList = () => {
   }, [categoryName, searchQuery])
 
   const handleAddTask = async (taskData) => {
-    try {
-      const newTask = await taskService.create(taskData)
-      setTasks(prev => [newTask, ...prev])
-      toast.success("Task added successfully!")
+try {
+      const result = await taskService.create(taskData)
+      if (result.tasks) {
+        // Multiple tasks created from recurring pattern
+        setTasks(prev => [...result.tasks, ...prev])
+        toast.success(`${result.tasks.length} recurring tasks created!`)
+      } else {
+        // Single task created
+        setTasks(prev => [result, ...prev])
+        toast.success("Task added successfully!")
+      }
     } catch (err) {
       toast.error("Failed to add task")
       throw err
