@@ -190,14 +190,12 @@ const response = await getApperClient().createRecord('task_c', params);
       
       if (taskCount === 0 && createdTasks.length === 0) {
         currentDate.setDate(currentDate.getDate() + 1);
-      }
+}
     }
     
     if (tasksToCreate.length > 0) {
       const params = { records: tasksToCreate };
-const params = { records: tasksToCreate };
       const response = await getApperClient().createRecord('task_c', params);
-      
       if (response.success && response.results) {
         const successfulRecords = response.results.filter(result => result.success);
         return { tasks: successfulRecords.map(result => result.data) };
