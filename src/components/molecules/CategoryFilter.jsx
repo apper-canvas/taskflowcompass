@@ -34,7 +34,7 @@ const CategoryFilter = ({ categories = [], taskCounts = {} }) => {
       {categories.map((category) => (
         <NavLink
           key={category.Id}
-          to={`/category/${category.name.toLowerCase()}`}
+to={`/category/${category.Name.toLowerCase()}`}
           className={({ isActive }) =>
             `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
               isActive
@@ -44,12 +44,12 @@ const CategoryFilter = ({ categories = [], taskCounts = {} }) => {
           }
         >
           <div
-            className="w-3 h-3 rounded-full flex-shrink-0"
-            style={{ backgroundColor: category.color }}
+className="w-3 h-3 rounded-full flex-shrink-0"
+            style={{ backgroundColor: category.color_c }}
           />
-          <span className="flex-1">{category.name}</span>
+          <span className="flex-1">{category.Name}</span>
           <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
-            {getCategoryCount(category.name)}
+            {getCategoryCount(category.Name)}
           </span>
         </NavLink>
       ))}

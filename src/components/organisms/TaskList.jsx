@@ -72,13 +72,13 @@ try {
     }
   }
 
-  const handleToggleComplete = async (taskId) => {
+const handleToggleComplete = async (taskId) => {
     const task = tasks.find(t => t.Id === taskId)
     if (!task) return
 
     try {
       const updatedTask = await taskService.update(taskId, {
-        completed: !task.completed
+        completed_c: !task.completed_c
       })
       
       setTasks(prev => 
@@ -86,7 +86,7 @@ try {
       )
       
       toast.success(
-        updatedTask.completed ? "Task completed! 🎉" : "Task marked as incomplete"
+        updatedTask.completed_c ? "Task completed! 🎉" : "Task marked as incomplete"
       )
     } catch (err) {
       toast.error("Failed to update task")
@@ -129,12 +129,12 @@ try {
     }
   }
 
-  const filteredTasks = tasks.filter(task => 
-    showCompleted ? task.completed : !task.completed
+const filteredTasks = tasks.filter(task => 
+    showCompleted ? task.completed_c : !task.completed_c
   )
 
-  const completedTasks = tasks.filter(task => task.completed)
-  const activeTasks = tasks.filter(task => !task.completed)
+  const completedTasks = tasks.filter(task => task.completed_c)
+  const activeTasks = tasks.filter(task => !task.completed_c)
 
   const getPageTitle = () => {
     if (searchQuery) return `Search results for "${searchQuery}"`

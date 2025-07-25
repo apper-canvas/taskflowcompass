@@ -53,8 +53,8 @@ const TaskCard = ({
     return format(date, "MMM d")
   }
 
-  const priorityConfig = getPriorityConfig(task.priority)
-  const dueDateStatus = getDueDateStatus(task.dueDate)
+const priorityConfig = getPriorityConfig(task.priority_c)
+  const dueDateStatus = getDueDateStatus(task.dueDate_c)
 
   return (
     <motion.div
@@ -64,16 +64,16 @@ const TaskCard = ({
       exit={{ opacity: 0, y: -20 }}
       whileHover={{ scale: 1.01 }}
       transition={{ duration: 0.2 }}
-      className={`bg-white rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-all duration-200 ${
+className={`bg-white rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-all duration-200 ${
         isDragging ? "task-drag" : ""
-      } ${task.completed ? "opacity-75" : ""}`}
+      } ${task.completed_c ? "opacity-75" : ""}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="flex items-start gap-3">
         <div className="mt-0.5">
-          <Checkbox
-            checked={task.completed}
+<Checkbox
+            checked={task.completed_c}
             onChange={onToggleComplete}
           />
         </div>
@@ -82,11 +82,11 @@ const TaskCard = ({
           <div className="flex items-start justify-between gap-2">
             <h3 
               className={`font-medium text-gray-900 ${
-                task.completed ? "line-through text-gray-500" : ""
+                task.completed_c ? "line-through text-gray-500" : ""
               } cursor-pointer hover:text-primary transition-colors`}
               onClick={onEdit}
             >
-              {task.title}
+              {task.title_c}
             </h3>
             
             {isHovered && (
@@ -112,13 +112,13 @@ const TaskCard = ({
           </div>
 
           <div className="flex items-center gap-2 mt-2">
-            <Badge
+<Badge
               variant={priorityConfig.variant}
               size="sm"
               className="inline-flex items-center gap-1"
             >
               <ApperIcon name={priorityConfig.icon} size={10} />
-              {task.priority}
+              {task.priority_c}
             </Badge>
 
             <div 
@@ -127,10 +127,10 @@ const TaskCard = ({
             />
 
             <span className="text-xs text-gray-600 font-medium">
-              {task.category}
+              {task.category_c}
             </span>
 
-            {task.dueDate && (
+{task.dueDate_c && (
               <div className="inline-flex items-center gap-1 text-xs">
                 <ApperIcon 
                   name={dueDateStatus?.icon || "Calendar"} 
@@ -144,7 +144,7 @@ const TaskCard = ({
                     "text-gray-600"
                   }`}
                 >
-                  {formatDueDate(task.dueDate)}
+                  {formatDueDate(task.dueDate_c)}
                 </span>
               </div>
             )}

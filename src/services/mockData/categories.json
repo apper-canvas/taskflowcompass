@@ -1,26 +1,26 @@
 [
   {
     "Id": 1,
-    "name": "Work",
-    "color": "#5B67F5",
-    "taskCount": 4
+    "Name": "Work",
+    "color_c": "#5B67F5",
+    "taskCount_c": 4
   },
   {
     "Id": 2,
-    "name": "Personal",
-    "color": "#FF6B6B",
-    "taskCount": 2
+    "Name": "Personal",
+    "color_c": "#FF6B6B",
+    "taskCount_c": 2
   },
   {
     "Id": 3,
-    "name": "Learning",
-    "color": "#4CAF50",
-    "taskCount": 1
+    "Name": "Learning",
+    "color_c": "#4CAF50",
+    "taskCount_c": 1
   },
   {
     "Id": 4,
-    "name": "Health",
-    "color": "#FF9800",
-    "taskCount": 1
+    "Name": "Health",
+    "color_c": "#FF9800",
+    "taskCount_c": 1
   }
 ]

@@ -9,7 +9,7 @@ const QuickAddBar = ({ onAdd, categories = [] }) => {
 const [title, setTitle] = useState("")
   const [isExpanded, setIsExpanded] = useState(false)
   const [priority, setPriority] = useState("medium")
-  const [category, setCategory] = useState(categories[0]?.name || "Personal")
+const [category, setCategory] = useState(categories[0]?.Name || "Personal")
   const [isRecurring, setIsRecurring] = useState(false)
   const [recurringData, setRecurringData] = useState(null)
   const [showRecurringModal, setShowRecurringModal] = useState(false)
@@ -17,13 +17,13 @@ const handleSubmit = async (e) => {
     e.preventDefault()
     if (!title.trim()) return
 
-    try {
+try {
       const taskData = {
-        title: title.trim(),
-        priority,
-        category,
-        isRecurring,
-        recurringData: isRecurring ? recurringData : null
+        title_c: title.trim(),
+        priority_c: priority,
+        category_c: category,
+        isRecurring_c: isRecurring,
+        recurringData_c: isRecurring ? recurringData : null
       }
       await onAdd(taskData)
       setTitle("")
@@ -134,9 +134,9 @@ const handleSubmit = async (e) => {
                   onChange={(e) => setCategory(e.target.value)}
                   className="w-full rounded-md border border-gray-200 px-3 py-1.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary/20"
                 >
-                  {categories.map((cat) => (
-                    <option key={cat.Id} value={cat.name}>
-                      {cat.name}
+{categories.map((cat) => (
+                    <option key={cat.Id} value={cat.Name}>
+                      {cat.Name}
                     </option>
                   ))}
                 </select>
