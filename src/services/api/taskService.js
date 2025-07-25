@@ -1,9 +1,19 @@
-// Initialize ApperClient with Project ID and Public Key
-const { ApperClient } = window.ApperSDK;
-const apperClient = new ApperClient({
-  apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
-  apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
-});
+// Lazy initialization of ApperClient to avoid race conditions with SDK loading
+let apperClient = null;
+
+const getApperClient = () => {
+  if (!apperClient) {
+    if (!window.ApperSDK) {
+      throw new Error('ApperSDK not loaded. Please ensure the SDK script is loaded before using services.');
+    }
+    const { ApperClient } = window.ApperSDK;
+    apperClient = new ApperClient({
+      apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+      apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+    });
+  }
+  return apperClient;
+};
 
 export const taskService = {
   async getAll() {
@@ -32,7 +42,7 @@ export const taskService = {
         ]
       };
 
-      const response = await apperClient.fetchRecords('task_c', params);
+const response = await getApperClient().fetchRecords('task_c', params);
       
       if (!response.success) {
         console.error(response.message);
@@ -70,7 +80,7 @@ export const taskService = {
         ]
       };
 
-      const response = await apperClient.getRecordById('task_c', parseInt(id), params);
+const response = await getApperClient().getRecordById('task_c', parseInt(id), params);
       
       if (!response || !response.data) {
         return null;
@@ -110,7 +120,7 @@ export const taskService = {
         ]
       };
 
-      const response = await apperClient.createRecord('task_c', params);
+const response = await getApperClient().createRecord('task_c', params);
       
       if (!response.success) {
         console.error(response.message);
@@ -185,7 +195,8 @@ export const taskService = {
     
     if (tasksToCreate.length > 0) {
       const params = { records: tasksToCreate };
-      const response = await apperClient.createRecord('task_c', params);
+const params = { records: tasksToCreate };
+      const response = await getApperClient().createRecord('task_c', params);
       
       if (response.success && response.results) {
         const successfulRecords = response.results.filter(result => result.success);
@@ -259,7 +270,7 @@ export const taskService = {
         ]
       };
 
-      const response = await apperClient.updateRecord('task_c', params);
+const response = await getApperClient().updateRecord('task_c', params);
       
       if (!response.success) {
         console.error(response.message);
@@ -298,7 +309,7 @@ export const taskService = {
         RecordIds: [parseInt(id)]
       };
 
-      const response = await apperClient.deleteRecord('task_c', params);
+const response = await getApperClient().deleteRecord('task_c', params);
       
       if (!response.success) {
         console.error(response.message);
@@ -331,7 +342,7 @@ export const taskService = {
         RecordIds: ids.map(id => parseInt(id))
       };
 
-      const response = await apperClient.deleteRecord('task_c', params);
+const response = await getApperClient().deleteRecord('task_c', params);
       
       if (!response.success) {
         console.error(response.message);
@@ -391,7 +402,7 @@ export const taskService = {
         ]
       };
 
-      const response = await apperClient.fetchRecords('task_c', params);
+const response = await getApperClient().fetchRecords('task_c', params);
       
       if (!response.success) {
         console.error(response.message);
@@ -465,7 +476,7 @@ export const taskService = {
         ]
       };
 
-      const response = await apperClient.fetchRecords('task_c', params);
+const response = await getApperClient().fetchRecords('task_c', params);
       
       if (!response.success) {
         console.error(response.message);

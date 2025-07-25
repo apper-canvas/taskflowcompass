@@ -28,6 +28,11 @@ function AppContent() {
   
   // Initialize ApperUI once when the app loads
   useEffect(() => {
+if (!window.ApperSDK) {
+      console.error('ApperSDK not loaded. Please check your internet connection and SDK configuration.');
+      return;
+    }
+    
     const { ApperClient, ApperUI } = window.ApperSDK;
     
     const client = new ApperClient({

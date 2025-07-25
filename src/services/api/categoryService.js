@@ -1,9 +1,19 @@
-// Initialize ApperClient with Project ID and Public Key
-const { ApperClient } = window.ApperSDK;
-const apperClient = new ApperClient({
-  apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
-  apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
-});
+// Lazy initialization of ApperClient to avoid race conditions with SDK loading
+let apperClient = null;
+
+const getApperClient = () => {
+  if (!apperClient) {
+    if (!window.ApperSDK) {
+      throw new Error('ApperSDK not loaded. Please ensure the SDK script is loaded before using services.');
+    }
+    const { ApperClient } = window.ApperSDK;
+    apperClient = new ApperClient({
+      apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+      apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+    });
+  }
+  return apperClient;
+};
 
 export const categoryService = {
   async getAll() {
@@ -18,7 +28,7 @@ export const categoryService = {
         ]
       };
 
-      const response = await apperClient.fetchRecords('category_c', params);
+const response = await getApperClient().fetchRecords('category_c', params);
       
       if (!response.success) {
         console.error(response.message);
@@ -48,7 +58,7 @@ export const categoryService = {
         ]
       };
 
-      const response = await apperClient.getRecordById('category_c', parseInt(id), params);
+const response = await getApperClient().getRecordById('category_c', parseInt(id), params);
       
       if (!response || !response.data) {
         return null;
@@ -77,7 +87,7 @@ export const categoryService = {
         ]
       };
 
-      const response = await apperClient.createRecord('category_c', params);
+const response = await getApperClient().createRecord('category_c', params);
       
       if (!response.success) {
         console.error(response.message);
@@ -121,7 +131,7 @@ export const categoryService = {
         ]
       };
 
-      const response = await apperClient.updateRecord('category_c', params);
+const response = await getApperClient().updateRecord('category_c', params);
       
       if (!response.success) {
         console.error(response.message);
@@ -160,7 +170,7 @@ export const categoryService = {
         RecordIds: [parseInt(id)]
       };
 
-      const response = await apperClient.deleteRecord('category_c', params);
+const response = await getApperClient().deleteRecord('category_c', params);
       
       if (!response.success) {
         console.error(response.message);
